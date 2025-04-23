@@ -1,0 +1,162 @@
+<!-- View page for Budget section -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Budget Tracking Dashboard</title>
+    <!-- using chart.js and Vue.js for data visualization and interactivity -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <!-- Using Vue.js Framework -->
+    <script src="https://unpkg.com/vue@3/dist/vue.global.prod.js"></script>
+
+    <!-- Embedded Styles -->
+    <style>
+        body {
+        font-family: 'Arial', sans-serif;
+        margin: 0;
+        padding: 0;
+        background-color: #f0f0f0;
+        }
+
+        .container {
+        max-width: 1000px;
+        margin: auto;
+        padding: 20px;
+        }
+
+        h1 {
+        text-align: center;
+        color: #004a7c;
+        margin-bottom: 10px;
+        }
+
+        .dashboard {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        }
+
+        .calendar-container {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        justify-content: center;
+        padding: 10px;
+        gap: 15px;
+        }
+
+        #calendar {
+        padding: 5px;
+        font-size: 14px;
+        width: 150px;
+        }
+
+        .view-buttons button {
+        margin: 5px;
+        padding: 6px 12px;
+        font-size: 14px;
+        background-color: #004a7c;
+        color: white;
+        border: none;
+        border-radius: 4px;
+        cursor: pointer;
+        }
+
+        .view-buttons button:hover {
+        background-color: #0056b3;
+        }
+
+        .charts-container {
+        display: flex;
+        flex-direction: row;
+        justify-content: space-around;
+        align-items: flex-start;
+        gap: 15px;
+        flex-wrap: nowrap;
+        }
+
+        .chart-wrapper {
+        flex: 1;
+        background-color: white;
+        border-radius: 8px;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        }
+
+        .pie-chart-wrapper {
+        flex: 2;
+        max-width: 250px;
+        height: 400px;
+        }
+
+        .line-chart-wrapper {
+        flex: 3;
+        height: 400px;
+        }
+
+        .chart-wrapper canvas {
+        width: 100%;
+        max-height: 100%;
+        margin: auto;
+        }
+
+        canvas {
+        width: 100%;
+        height: 100%;
+        }
+
+        .back-button {
+        display: block;
+        margin: 20px auto 0;
+        background-color: #004a7c;
+        color: #fff;
+        border: none;
+        padding: 10px 20px;
+        border-radius: 5px;
+        font-size: 16px;
+        cursor: pointer;
+        }
+    </style>
+</head>
+<body>
+    <div id="app" class="container">
+        <h1>Budget Tracking Dashboard</h1>
+        <!-- Budget dashboard to visualize income and expenses over time, and see how they are categorized -->
+        <div class="dashboard">
+            <div class="calendar-container">
+                <input type="date" id="calendar" :value="calendarValue" @change="onCalendarChange" />
+                <!-- three buttons to switch between day, month, and year views -->
+                <div class="view-buttons">
+                    <button @click="fetchBudgetData('day')">Day</button>
+                    <button @click="fetchBudgetData('month')">Month</button>
+                    <button @click="fetchBudgetData('year')">Year</button>
+                </div>
+            </div>
+
+            <!-- Three charts to visualize the budget data: IncomeExpense, Expense Category,Line chart -->
+            <div class="charts-container">
+                <div class="chart-wrapper pie-chart-wrapper">
+                    <canvas id="incomeExpenseChart"></canvas>
+                </div>
+                <div class="chart-wrapper pie-chart-wrapper">
+                    <canvas id="categoryExpenseChart"></canvas>
+                </div>
+                <div class="chart-wrapper line-chart-wrapper">
+                    <canvas id="lineChart"></canvas>
+                </div>
+            </div>
+        </div>
+
+        <!-- Returning to home page: -->
+        <a href="{{ url_for('index') }}">
+            <button class="back-button">Back to Home</button>
+        </a>
+    </div>
+
+    <!-- Linking the JavaScript file for the budget visualizer: -->
+    <script type="module" src="{{ url_for('static', filename='visualizer_budget.js') }}"></script>
+</body>
+</html>

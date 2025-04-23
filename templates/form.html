@@ -1,0 +1,223 @@
+<!-- This is the HTML template for the data entry form in the application. The form is styled with CSS and includes JavaScript for interactivity -->
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>VitaFin - Data Entry Form</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    <!-- Embedded Styles -->
+    <style>
+        body {
+            font-family: 'Arial', sans-serif;
+            background-color: #f0f0f0;
+            margin: 0;
+            padding: 0;
+        }
+
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            margin: 0 auto;
+            max-width: 600px;
+            margin-top: 50px;
+        }
+
+        h1 {
+            color: #004a7c;
+            text-align: center;
+        }
+
+        .form-tabs {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 20px;
+        }
+
+        .tab-button {
+            background-color: #e0e0e0;
+            border: none;
+            padding: 10px 20px;
+            margin: 0 5px;
+            cursor: pointer;
+            border-radius: 5px 5px 0 0;
+        }
+
+        .tab-button.active {
+            background-color: #004a7c;
+            color: white;
+        }
+
+        .form-section {
+            display: none;
+        }
+
+        .form-section.active {
+            display: block;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: bold;
+        }
+
+        input, select {
+            width: 100%;
+            padding: 8px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-sizing: border-box;
+        }
+
+        button {
+            background-color: #004a7c;
+            color: white;
+            border: none;
+            padding: 10px 15px;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+        button:hover {
+            background-color: #0056b3;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Data Entry Form</h1>
+        <!-- Two tabs for health and budget data entry -->
+        <div class="form-tabs">
+            <button class="tab-button active" onclick="showForm('health')">Health Data</button>
+            <button class="tab-button" onclick="showForm('budget')">Budget Data</button>
+        </div>
+        <!-- Health data entry form with fields for date, weight, height, steps, heart rate, and sleep hours -->
+        <div id="health-form" class="form-section active">
+            <form id="health-data-form">
+                <div class="form-group">
+                    <label for="date">Date:</label>
+                    <input type="date" id="health-date" name="date" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="weight">Weight (kg):</label>
+                    <input type="number" id="weight" name="weight" step="0.1" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="height">Height (cm):</label>
+                    <input type="number" id="height" name="height" step="0.1" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="steps">Steps:</label>
+                    <input type="number" id="steps" name="steps" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="heartrate">HeartRate:</label>
+                    <input type="number" id="heartrate" name="heartrate" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="sleep">Sleep (hours):</label>
+                    <input type="number" id="sleep" name="sleep" step="0.1" required>
+                </div>
+                <!-- Submit button for health data -->
+                <button type="button" id="healthSubmitBtn">Submit Health Data</button>
+            </form>
+        </div>
+        
+        <!-- Budget data entry form with fields for date, type (income/expense), category, amount, and description -->
+        <div id="budget-form" class="form-section">
+            <form id="budget-data-form">
+                <div class="form-group">
+                    <label for="budget-date">Date:</label>
+                    <input type="date" id="budget-date" name="date" required>
+                </div>
+                
+                <div>
+                    <label for="budget-type">Type:</label>
+                    <select id="budget-type" name="type" required onchange="toggleCategory()">
+                        <option value="">Select a type</option>
+                        <option value="income">Income</option>
+                        <option value="expense">Expense</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="category">Category:</label>
+                    <select id="category" name="category" required disabled>
+                        <option value="">Select a category</option>
+                        <option value="household">Household</option>
+                        <option value="food">Food</option>
+                        <option value="transportation">Transportation</option>
+                        <option value="apparel">Apparel</option>
+                        <option value="other">Other</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="amount">Amount ($):</label>
+                    <input type="number" id="amount" name="amount" step="0.01" required>
+                </div>
+                
+                <div class="form-group">
+                    <label for="description">Description:</label>
+                    <input type="text" id="description" name="description">
+                </div>
+                
+                <button type="button" id="budgetSubmitBtn">Submit Budget Data</button>
+            </form>
+        </div>
+        
+        <!-- Returning to the home page after data submission -->
+        <a href="{{ url_for('index') }}" class="back-link">
+            <button>Back to Home</button>
+        </a>
+    </div>
+
+    <!-- JavaScript to handle form submission and validation -->
+    <script src="{{ url_for('static', filename='form-handler.js') }}"></script>
+    <script>
+        // JavaScript to handle form switching
+        function showForm(formType) {
+            document.querySelectorAll('.form-section').forEach(form => {
+                form.classList.remove('active');
+            });
+            document.getElementById(formType + '-form').classList.add('active');
+            document.querySelectorAll('.tab-button').forEach(button => {
+                button.classList.remove('active');
+            });
+            event.target.classList.add('active');
+        }
+        
+        // JavaScript to toggle category selection based on type selection
+        function toggleCategory() {
+            const typeSelect = document.getElementById('budget-type');
+            const categorySelect = document.getElementById('category');
+
+            if (typeSelect.value === 'expense') {
+                categorySelect.disabled = false;
+            } else {
+                categorySelect.disabled = true;
+                categorySelect.value = '';
+            }
+        }
+    </script>
+</body>
+</html>
